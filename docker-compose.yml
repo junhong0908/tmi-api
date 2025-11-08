@@ -1,0 +1,27 @@
+services:
+  mysql:
+    image: mysql:8.0.32
+    container_name: tmi-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: tmi
+      MYSQL_USER: tmi
+      MYSQL_PASSWORD: tmi
+      MYSQL_ROOT_PASSWORD: root
+      TZ: Asia/Seoul
+    ports:
+      - "3306:3306"
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_0900_ai_ci
+      - --default-authentication-plugin=mysql_native_password
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-ptmi"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    volumes:
+      - db-data:/var/lib/mysql
+
+volumes:
+  db-data:
